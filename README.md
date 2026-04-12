@@ -60,3 +60,15 @@ Importa estos archivos en Postman:
 - `postman/local.postman_environment.json`
 
 Luego selecciona el environment `Blacklist Local` y ejecuta la colección completa.
+
+### Sincronización automática de colección (Postman API)
+
+Puedes crear/actualizar la colección en tu workspace sin hacerlo manualmente:
+
+```bash
+POSTMAN_API_KEY="<tu_api_key>" \
+POSTMAN_WORKSPACE_ID="<tu_workspace_id>" \
+./postman/sync_postman_collection.sh
+```
+
+Después de sincronizar, entra a Postman y publica la documentación de la colección para obtener la URL pública.

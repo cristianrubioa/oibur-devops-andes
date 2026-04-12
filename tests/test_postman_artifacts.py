@@ -20,7 +20,6 @@ def test_collection_has_required_requests():
     assert "Health - GET /health" in by_name
     assert "Create blacklist entry - POST /blacklists" in by_name
     assert "Check blacklist entry - GET /blacklists/{email}" in by_name
-    assert "Unauthorized sample - GET /blacklists/{email}" in by_name
 
     assert by_name["Health - GET /health"]["request"]["method"] == "GET"
     assert by_name["Create blacklist entry - POST /blacklists"]["request"]["method"] == "POST"

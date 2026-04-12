@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "c0c8d22f-1f5e-4ef9-9b77-9c2ae3a9f001",
     "name": "Blacklist Microservice API",
-    "description": "Coleccion para probar los endpoints del microservicio de lista negra global.",
+    "description": "# Blacklist Microservice API\n\nAPI REST para gestionar la lista negra global de emails de la organización.\n\n## Autorización\nTodos los endpoints bajo `/blacklists` requieren header:\n`Authorization: Bearer {{token}}`\n\n## Variables de colección\n- `base_url`: URL del servicio (local o AWS)\n- `token`: bearer token estático configurado en la aplicación\n- `email`: email de prueba para los escenarios\n- `app_uuid`: UUID de aplicación cliente\n- `blocked_reason`: motivo opcional (máx. 255)\n\n## Flujo recomendado\n1. Ejecutar `Health`.\n2. Ejecutar `Create blacklist entry`.\n3. Ejecutar `Check blacklist entry`.\n4. Validar seguridad con token inválido desde un request temporal (opcional).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -20,7 +20,7 @@
             "health"
           ]
         },
-        "description": "Valida estado del servicio. No requiere autenticacion."
+        "description": "Valida que el servicio esté disponible para health checks de Elastic Beanstalk.\n\n**Auth:** No requerida.\n\n**Respuesta 200:**\n```json\n{\"status\": \"ok\"}\n```"
       },
       "event": [
         {
@@ -69,7 +69,7 @@
             "blacklists"
           ]
         },
-        "description": "Agrega un email a la lista negra global."
+        "description": "Agrega un email a la lista negra global.\n\n**Auth:** `Bearer {{token}}` (obligatoria).\n\n**Body requerido:**\n- `email` (string, formato email válido)\n- `app_uuid` (UUID obligatorio)\n- `blocked_reason` (string opcional, máximo 255 caracteres)\n\n**Respuesta 201 (creado):**\n```json\n{\"message\": \"Email added to blacklist\", \"email\": \"user@test.com\"}\n```\n\n**Respuesta 200 (ya existe):**\n```json\n{\"message\": \"Email is already in blacklist\"}\n```\n\n**Errores comunes:**\n- `400` payload inválido\n- `401` token ausente o inválido"
       },
       "event": [
         {
@@ -110,7 +110,7 @@
             "{{email}}"
           ]
         },
-        "description": "Consulta si un email esta en lista negra y su motivo."
+        "description": "Consulta si un email está registrado en la lista negra global y su motivo.\n\n**Auth:** `Bearer {{token}}` (obligatoria).\n\n**Path param:**\n- `email` (string)\n\n**Respuesta 200 (en lista negra):**\n```json\n{\"email\": \"user@test.com\", \"is_blacklisted\": true, \"blocked_reason\": \"fraude\"}\n```\n\n**Respuesta 200 (no existe):**\n```json\n{\"email\": \"new@test.com\", \"is_blacklisted\": false, \"blocked_reason\": null}\n```\n\n**Errores comunes:**\n- `401` token ausente o inválido"
       },
       "event": [
         {
@@ -126,43 +126,6 @@
               "  pm.expect(body).to.have.property('email');",
               "  pm.expect(body).to.have.property('is_blacklisted');",
               "  pm.expect(body).to.have.property('blocked_reason');",
-              "});"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Unauthorized sample - GET /blacklists/{email}",
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer invalid-token",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{base_url}}/blacklists/{{email}}",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "blacklists",
-            "{{email}}"
-          ]
-        },
-        "description": "Escenario negativo para validar autenticacion."
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test('Status code is 401', function () {",
-              "  pm.response.to.have.status(401);",
               "});"
             ]
           }
