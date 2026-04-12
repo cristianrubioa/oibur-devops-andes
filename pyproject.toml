@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "blacklist-microservice"
+version = "0.1.0"
+description = "Microservicio de lista negra global de emails"
+authors = ["Equipo Proyecto 1"]
+readme = "README.md"
+packages = [{ include = "blacklist_service" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Flask = "^2.3.3"
+Flask-RESTful = "^0.3.10"
+Flask-SQLAlchemy = "^3.1.1"
+Flask-Marshmallow = "^1.2.1"
+Flask-JWT-Extended = "^4.6.0"
+marshmallow = "^3.21.2"
+marshmallow-sqlalchemy = "^1.0.0"
+email-validator = "^2.1.1"
+psycopg2-binary = "^2.9.9"
+gunicorn = "^22.0.0"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
