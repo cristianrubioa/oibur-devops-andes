@@ -51,3 +51,12 @@ Header requerido para endpoints protegidos:
 ```text
 Authorization: Bearer static-token
 ```
+
+## Postman
+
+Importa estos archivos en Postman:
+
+- `postman/blacklist-microservice.collection.json`
+- `postman/local.postman_environment.json`
+
+Luego selecciona el environment `Blacklist Local` y ejecuta la colección completa.
