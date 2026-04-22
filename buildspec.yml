@@ -20,7 +20,7 @@ phases:
       - echo "Building application artifact..."
       - mkdir -p build
       - |
-        tar -czf build/blacklist-microservice-$(date +%Y%m%d-%H%M%S).tar.gz \
+        zip -r build/blacklist-microservice-$(date +%Y%m%d-%H%M%S).zip . \
           --exclude=.git \
           --exclude=.pytest_cache \
           --exclude=__pycache__ \
@@ -28,8 +28,7 @@ phases:
           --exclude=.pyenv \
           --exclude=poetry.lock \
           --exclude=.venv \
-          --exclude=venv \
-          .
+          --exclude=venv
       - echo "Artifact created successfully"
       - ls -lh build/
 
