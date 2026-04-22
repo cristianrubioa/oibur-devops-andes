@@ -1,0 +1,43 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - echo "Installing dependencies..."
+      - pip install --upgrade pip
+      - pip install poetry
+      - poetry install
+
+  pre_build:
+    commands:
+      - echo "Running unit tests..."
+      - poetry run pytest tests/test_api.py -v --tb=short
+
+  build:
+    commands:
+      - echo "Building application artifact..."
+      - mkdir -p build
+      - |
+        tar -czf build/blacklist-microservice-$(date +%Y%m%d-%H%M%S).tar.gz \
+          --exclude=.git \
+          --exclude=.pytest_cache \
+          --exclude=__pycache__ \
+          --exclude=.env \
+          --exclude=.pyenv \
+          --exclude=poetry.lock \
+          --exclude=.venv \
+          --exclude=venv \
+          .
+      - echo "Artifact created successfully"
+      - ls -lh build/
+
+artifacts:
+  files:
+    - build/**/*
+  discard-paths: yes
+
+cache:
+  paths:
+    - '/root/.cache/pypoetry/**/*'
