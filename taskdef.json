@@ -1,6 +1,6 @@
 {
   "family": "blacklist-microservice",
-  "networkMode": "awsvpc",
+  "networkMode": "INVALID_MODE",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
@@ -13,7 +13,7 @@
       "essential": true,
       "portMappings": [
         {
-          "containerPort": 9999,
+          "containerPort": 5000,
           "protocol": "tcp"
         }
       ],
