@@ -13,7 +13,7 @@
       "essential": true,
       "portMappings": [
         {
-          "containerPort": 5000,
+          "containerPort": 9999,
           "protocol": "tcp"
         }
       ],
@@ -21,7 +21,7 @@
       "secrets": [
         {
           "name": "DATABASE_URL",
-          "valueFrom": "arn:aws:ssm:us-east-1:171109859830:parameter/blacklist/DATABASE_URL_FAILED"
+          "valueFrom": "arn:aws:ssm:us-east-1:171109859830:parameter/blacklist/DATABASE_URL"
         },
         {
           "name": "AUTH_BEARER_TOKEN",
