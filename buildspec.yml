@@ -3,9 +3,8 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.12
+      python: 3.11
     commands:
-      - echo "Installing dependencies..."
       - pip install --upgrade pip
       - pip install poetry
       - poetry install
@@ -14,27 +13,34 @@ phases:
     commands:
       - echo "Running unit tests..."
       - poetry run pytest tests/test_api.py -v --tb=short
+      - echo "Logging in to Amazon ECR..."
+      - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - ECR_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_URI
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-7)
+      - IMAGE_FULL_URI=$ECR_URI/$IMAGE_REPO_NAME:$IMAGE_TAG
 
   build:
     commands:
-      - echo "Building application artifact..."
-      - mkdir -p build
-      - |
-        zip -r build/blacklist-microservice-$(date +%Y%m%d-%H%M%S).zip . \
-          --exclude=.git \
-          --exclude=.pytest_cache \
-          --exclude=__pycache__ \
-          --exclude=.env \
-          --exclude=.pyenv \
-          --exclude=poetry.lock \
-          --exclude=.venv \
-          --exclude=venv
-      - echo "Artifact created successfully"
-      - ls -lh build/
+      - echo "Building Docker image..."
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $IMAGE_FULL_URI
+
+  post_build:
+    commands:
+      - echo "Pushing image to ECR..."
+      - docker push $IMAGE_FULL_URI
+      - echo "Generating CodeDeploy artifacts..."
+      - printf '[{"name":"blacklist-microservice","imageUri":"%s"}]' "$IMAGE_FULL_URI" > imagedefinitions.json
+      - sed "s|<IMAGE_NAME>|$IMAGE_FULL_URI|g" taskdef.json > taskdef_rendered.json
+      - mv taskdef_rendered.json taskdef.json
+      - cat imagedefinitions.json
 
 artifacts:
   files:
-    - build/**/*
+    - imagedefinitions.json
+    - taskdef.json
+    - appspec.yaml
   discard-paths: yes
 
 cache:
