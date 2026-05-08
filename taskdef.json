@@ -1,6 +1,6 @@
 {
   "family": "blacklist-microservice",
-  "networkMode": "INVALID_MODE",
+  "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
