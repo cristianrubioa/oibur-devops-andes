@@ -4,7 +4,7 @@ set -euo pipefail
 ALB="http://blacklist-microservice-alb-477685829.us-east-1.elb.amazonaws.com"
 TOKEN="static-token"
 BATCH_SIZE=10
-TOTAL_BATCHES=5  # 10 requests x 5 batches x ~4 request types = 200+ total
+TOTAL_BATCHES=5
 
 echo "=== Stress Test: Normal Mixed Load ==="
 echo "Target: $ALB"
@@ -82,17 +82,6 @@ for batch in $(seq 1 $TOTAL_BATCHES); do
   wait "${PIDS[@]}"
   echo ""
 done
-
-# Additional GET /health burst to push total above 200
-echo "--- Health burst (filler to reach 200+ total) ---"
-for i in $(seq 1 60); do
-  (code=$(get_health); echo "  [GET /health] $code") &
-  TOTAL=$((TOTAL + 1))
-  if [ $(($i % 10)) -eq 0 ]; then
-    wait
-  fi
-done
-wait
 
 echo ""
 echo "=== Done ==="
