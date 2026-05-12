@@ -25,11 +25,11 @@
 
 ## 5. Despliegue via pipeline CI/CD
 
-- [ ] 5.1 Hacer push del código a CodeCommit (previa confirmación del usuario) para disparar el pipeline
-- [ ] 5.2 Verificar que CodeBuild compile exitosamente y la imagen con `newrelic` se suba a ECR
-- [ ] 5.3 Verificar que CodeDeploy complete el deploy Blue/Green sin errores
+- [x] 5.1 Hacer push del código a CodeCommit (previa confirmación del usuario) para disparar el pipeline
+- [x] 5.2 Verificar que CodeBuild compile exitosamente y la imagen con `newrelic` se suba a ECR
+- [x] 5.3 Verificar que CodeDeploy complete el deploy Blue/Green sin errores
 
 ## 6. Verificación de New Relic
 
-- [ ] 6.1 Confirmar que la aplicación `blacklist-microservice` aparece en la consola de New Relic
+- [x] 6.1 Confirmar que la aplicación `blacklist-microservice` aparece en la consola de New Relic
 - [ ] 6.2 Generar tráfico de prueba (usando la colección Postman existente) y verificar que llegan trazas a New Relic
