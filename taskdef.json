@@ -17,7 +17,11 @@
           "protocol": "tcp"
         }
       ],
-      "environment": [],
+      "environment": [
+        { "name": "NEW_RELIC_APP_NAME",                    "value": "blacklist-microservice" },
+        { "name": "NEW_RELIC_DISTRIBUTED_TRACING_ENABLED", "value": "true" },
+        { "name": "NEW_RELIC_LOG",                         "value": "stdout" }
+      ],
       "secrets": [
         {
           "name": "DATABASE_URL",
@@ -26,6 +30,10 @@
         {
           "name": "AUTH_BEARER_TOKEN",
           "valueFrom": "arn:aws:ssm:us-east-1:171109859830:parameter/blacklist/AUTH_BEARER_TOKEN"
+        },
+        {
+          "name": "NEW_RELIC_LICENSE_KEY",
+          "valueFrom": "arn:aws:ssm:us-east-1:171109859830:parameter/blacklist/NEW_RELIC_LICENSE_KEY"
         }
       ],
       "logConfiguration": {
