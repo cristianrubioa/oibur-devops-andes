@@ -18,7 +18,7 @@ resource "aws_codepipeline" "main" {
       output_artifacts = ["SourceArtifact"]
       configuration = {
         RepositoryName       = aws_codecommit_repository.main.repository_name
-        BranchName           = "master"
+        BranchName           = "main"
         PollForSourceChanges = "false"
       }
     }
@@ -63,10 +63,10 @@ resource "aws_codepipeline" "main" {
   tags = local.tags
 }
 
-# EventBridge rule: triggers the pipeline on every push to CodeCommit master
+# EventBridge rule: triggers the pipeline on every push to CodeCommit main
 resource "aws_cloudwatch_event_rule" "pipeline_trigger" {
   name        = "${local.name_prefix}-pipeline-trigger"
-  description = "Trigger CodePipeline on CodeCommit master push"
+  description = "Trigger CodePipeline on CodeCommit main push"
 
   event_pattern = jsonencode({
     source      = ["aws.codecommit"]
@@ -75,7 +75,7 @@ resource "aws_cloudwatch_event_rule" "pipeline_trigger" {
     detail = {
       event         = ["referenceUpdated", "referenceCreated"]
       referenceType = ["branch"]
-      referenceName = ["master"]
+      referenceName = ["main"]
     }
   })
 
